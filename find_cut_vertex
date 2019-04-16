@@ -1,0 +1,42 @@
+int f[N], t[N], vis[N], treeDeg[N];
+int tmr;
+set <int> cutVertex;
+
+void markCutVertex (int u) {
+	cutVertex.insert(u);
+}
+
+void dfsF (int u, int pr) {
+	vis[u] = 1;
+	f[u] = t[u] = tmr++;
+
+	for (auto vPair : Adj[u]) {
+		int v = vPair.x;
+		if (v == pr) continue;
+		if (vis[v])
+			f[u] = min(f[u], t[v]);
+		else {
+			++treeDeg[u];
+			dfsF (v, u);
+			f[u] = min(f[u], f[v]);
+
+			if (f[v] >= t[u] && pr != -1) //careful : u shouldn't be root here
+				markCutVertex(u);
+
+		}
+		if (pr == -1 && treeDeg[u] > 1) // case of u is root
+			markCutVertex(u);
+	}
+}
+
+void find_cut_vertex() {
+	tmr = 0;
+	for (int u = 0; u < V; ++u) {
+		vis[u] = treeDeg[u] = 0;
+		f[u] = t[u] = -1;
+	}
+	cutVertex.clear();
+
+	for (int u = 0; u < V; ++u)
+		if (!vis[u]) dfsF (u, -1);
+}

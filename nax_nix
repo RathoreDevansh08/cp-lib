@@ -1,0 +1,2 @@
+template<class T> bool nax(T& a, T b){return a < b ? (a = b, 1) : 0;}
+template<class T> bool nix(T& a, T b){return a > b ? (a = b, 1) : 0;}

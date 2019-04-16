@@ -1,0 +1,30 @@
+int cn;
+int vis[N] = {0}, cc[N] = {0};
+vector < vector <int> > cvec;
+
+void dfsC (int u) {
+	vis[u] = 1;
+	cc[u] = cn;
+	cvec[cn].push_back(u);
+
+	for (auto vPair : Adj[u]) {
+		int v = vPair.x;
+		if (!vis[v])
+			dfsC (v);
+	}
+}
+
+void ccomp_undir () {
+	cn = 0;
+	for (int i = 0; i < N; ++i)
+		vis[i] = 0, cc[i] = -1;
+	cvec.clear();
+
+	for (int u = 0; u < V; ++u) {
+		if (!vis[u]) {
+			cvec.push_back(vector <int>());
+			dfsC (u);
+			++cn;
+		}
+	}
+}
